@@ -1,11 +1,19 @@
 const express = require('express');
-const CacheController = require('./controllers/cacheController')
+const CacheRouter = require('./cacheRouter');
 
 function OpalCache(config) {
+    let _this = this;
     this.app = express();
+    let cacheRouter = new CacheRouter();
 
-    this.app.post('/query', CacheController.postQuery);
-    this.app.post('/result', CacheController.postResult);
+    this.app.use(cacheRouter.router);
+
+    this.start = function() {
+        return new Promise(function(resolve, reject) {
+           resolve(_this.app);
+        });
+    }
 }
 
 
+module.exports = OpalCache;
