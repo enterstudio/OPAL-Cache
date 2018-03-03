@@ -12,7 +12,6 @@ function CacheController(db) {
     this.postResult = CacheController.prototype.postResult.bind(this);
 }
 
-//TODO: Move this function out of Cache Contreller after figuring out why 'this' inside the function is not the object
 CacheController.prototype.postQuery = function(req, res) {
     if (!req.body.job) {
         // Query is invalid
