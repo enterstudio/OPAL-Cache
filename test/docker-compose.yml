@@ -10,7 +10,7 @@ services:
         ports:
             - 27017:27017
 
-    cache:
+    tests:
         build:
             context: ..
             dockerfile: ./test/Dockerfile
