@@ -1,8 +1,12 @@
 const { Constants } =  require('eae-utils');
+const request = require('request');
+
+//TODO: Get real Url
+let interfaceUrl = "localhost:8080";
+
 
 function CacheController(db) {
     this.db = db;
-    this.postResult = CacheController.prototype.postResult;
     let _this = this;
 
     //TODO: Move this function out of Cache Contreller after figuring out why 'this' inside the function is not the object
@@ -46,8 +50,23 @@ function CacheController(db) {
 }
 
 CacheController.prototype.postResult = function(req, res) {
-    res.send("Hello World");
-    //TODO: Forward result to interface
+    //Forward result to interface
+    request(
+        {
+            method: 'POST',
+            baseUrl: interfaceUrl,
+            uri: '/result',
+            json: true,
+            body: req.body
+        },
+        function(error) {
+            if (error) {
+                res.json(ErrorHelper('Couldn\'t forward result to interface', error));
+            }
+        }
+    );
+
+    res.send(200);
 };
 
 module.exports = CacheController;
