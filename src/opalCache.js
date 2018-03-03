@@ -31,9 +31,10 @@ OpalCache.prototype.connectMongoDB = function() {
         mongodb.connect(_this.config.mongoUrl, function(error, db) {
             if (error) {
                 reject("Could not connect to database")
+            } else {
+                console.log('Connected to Mongo');
+                resolve(db);
             }
-            console.log('Connected to Mongo');
-            resolve(db);
         });
     });
 };
