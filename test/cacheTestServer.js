@@ -16,7 +16,7 @@ CacheTestServer.prototype.setup = function() {
         process.env.TEST = 1;
         _this.opalCache.start().then(function() {
             _this.db = _this.opalCache.db;
-            _this.db.collection(Constants.EAE_COLLECTION_JOBS).drop().then(function() {
+            _this.db.collection(Constants.EAE_COLLECTION_JOBS).deleteMany({}).then(function() {
                 resolve(true);
             });
         });
