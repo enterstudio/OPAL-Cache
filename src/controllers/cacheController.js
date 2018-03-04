@@ -39,7 +39,7 @@ CacheController.prototype.postQuery = function(req, res) {
                 Constants.EAE_JOB_STATUS_SCHEDULED,
                 Constants.EAE_JOB_STATUS_RUNNING
             ];
-            if (retrievedQuery.status[0] in statuses) {
+            if (statuses.includes(retrievedQuery.status[0])) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
                 res.send({result: null, waiting: true});
             } else {
@@ -47,6 +47,8 @@ CacheController.prototype.postQuery = function(req, res) {
                 res.send({result: retrievedQuery.output, waiting: false})
             }
         }
+    }, function (error) {
+        console.log(error);
     });
 };
 
