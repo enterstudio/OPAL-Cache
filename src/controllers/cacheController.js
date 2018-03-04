@@ -14,7 +14,7 @@ function CacheController(db) {
 
 CacheController.prototype.postQuery = function(req, res) {
     if (!req.body.job) {
-        // Query is invalid
+        // Request is invalid
         res.send(400);
     }
 
@@ -52,6 +52,11 @@ CacheController.prototype.postQuery = function(req, res) {
 };
 
 CacheController.prototype.postResult = function(req, res) {
+    if (!req.body.result || !req.body.job_id) {
+        // Request is invalid
+        res.send(400);
+    }
+
     //Forward result to interface
     request(
         {
