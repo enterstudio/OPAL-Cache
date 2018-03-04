@@ -1,8 +1,8 @@
-const { Constants } =  require('eae-utils');
+const { Constants, ErrorHelper } =  require('eae-utils');
 const request = require('request');
 
 //TODO: Get real Url
-let interfaceUrl = "localhost:8080";
+let interfaceUrl = 'localhost:8080';
 
 
 function CacheController(db) {
@@ -43,11 +43,11 @@ CacheController.prototype.postQuery = function(req, res) {
                 res.send({result: null, waiting: true});
             } else {
                 // Query has already been already submitted to the system and the system has the result
-                res.send({result: retrievedQuery.output, waiting: false})
+                res.send({result: retrievedQuery.output, waiting: false});
             }
         }
     }, function (error) {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
     });
 };
 
