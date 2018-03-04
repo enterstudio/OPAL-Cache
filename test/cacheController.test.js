@@ -14,7 +14,7 @@ afterAll(function ()  {
 });
 
 describe('POST /query', () => {
-    test("Cache response contains a not null result and waiting set to false when query has been submitted before and is completed", () => {
+    test("Cache response contains a not null result and waiting set to false when query has been submitted before and is completed", async () => {
         let query = {
             startDate: new Date(),
             endDate: new Date(0),
@@ -25,21 +25,30 @@ describe('POST /query', () => {
             output: [125],
         };
 
-        return cacheTestServer.insertJob(query).then(function() {
-            request(cacheTestServer.opalCache.app)
-                .post('/query')
-                .send({job: query})
-                .expect(200)
-                .expect(function (res) {
-                    console.log("Body is: ");
-                    console.log(res.body);
-                    expect(res.body.result).toEqual(query.output);
-                    expect(res.body.waiting).toBe(false);
-                })
-        });
+        await cacheTestServer.insertJob(query);
+        return request(cacheTestServer.opalCache.app)
+            .post('/query')
+            .send({job: query})
+            .expect(200)
+            .expect(function (res) {
+                console.log("Body is: ");
+                console.log(res.body);
+                expect(res.body.result).toEqual(query.output);
+                expect(res.body.waiting).toBe(false);
+            })
     });
 
-    test("Cache response contains null result and waiting set to false when query is not been submitted before", () => {
+    test("Cache response contains null result and waiting set to false when query has not been submitted before", async () => {
+        let submittedQuery = {
+            startDate: new Date(1),
+            endDate: new Date(2),
+            algorithm: "migration",
+            aggregationLevel: "C",
+            aggregationValue: "C",
+            status: [],
+            output: [3213],
+        };
+
         let query = {
             startDate: new Date(),
             endDate: new Date(0),
@@ -50,11 +59,12 @@ describe('POST /query', () => {
             output: [125],
         };
 
+        await cacheTestServer.insertJob(submittedQuery);
         return request(cacheTestServer.opalCache.app)
             .post('/query')
             .send({job: query})
             .expect(200)
-            .expect(function(res){
+            .expect(function (res) {
                 expect(res.body.result).toBeNull();
                 expect(res.body.waiting).toBe(false);
             })
@@ -71,16 +81,15 @@ describe('POST /query', () => {
             output: [125],
         };
 
-        return cacheTestServer.insertJob(query).then(function() {
-            request(cacheTestServer.opalCache.app)
-                .post('/query')
-                .send({job: query})
-                .expect(200)
-                .expect(function (res) {
-                    expect(res.body.result).toBeNull();
-                    expect(res.body.waiting).toBe(true);
-                })
-        });
+        await cacheTestServer.insertJob(query);
+        return request(cacheTestServer.opalCache.app)
+            .post('/query')
+            .send({job: query})
+            .expect(200)
+            .expect(function (res) {
+                expect(res.body.result).toBeNull();
+                expect(res.body.waiting).toBe(true);
+            })
     });
 });
 
