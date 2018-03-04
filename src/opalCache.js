@@ -9,6 +9,7 @@ function OpalCache(config) {
     this.app = express();
     this.config = config;
 
+    //TODO: Move function out
     this.start = function() {
         return new Promise(function(resolve, reject) {
             _this.connectMongoDB().then(function(db) {
@@ -18,11 +19,11 @@ function OpalCache(config) {
                 _this.app.use(cacheRouter.router);
                 resolve(_this.app);
             }, function(error) {
-                console.log(error);
+                console.log(error); // eslint-disable-line no-console
                 reject(error);
             });
         });
-    }
+    };
 }
 
 OpalCache.prototype.connectMongoDB = function() {
@@ -30,10 +31,10 @@ OpalCache.prototype.connectMongoDB = function() {
     return new Promise(function(resolve, reject) {
         mongodb.connect(_this.config.mongoUrl, function(error, db) {
             if (error) {
-                reject("Could not connect to database")
+                reject('Could not connect to database');
+            } else {
+                resolve(db);
             }
-            console.log('Connected to Mongo');
-            resolve(db);
         });
     });
 };

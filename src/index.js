@@ -1,4 +1,3 @@
-let express = require('express');
 let os = require('os');
 
 let config = require('../config/opal.cache.config.js');
