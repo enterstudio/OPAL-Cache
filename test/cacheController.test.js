@@ -14,6 +14,12 @@ afterAll(function ()  {
 });
 
 describe('POST /query', () => {
+    test("Cache response is 400 when request does not contain query", async () => {
+        return request(cacheTestServer.opalCache.app)
+            .post('/query')
+            .send({})
+            .expect(400)
+    });
     test("Cache response contains a not null result and waiting set to false when query has been submitted before and is completed", async () => {
         let query = {
             startDate: new Date(),
@@ -93,3 +99,24 @@ describe('POST /query', () => {
     });
 });
 
+describe('POST /result', () => {
+    test("Cache response is 400 when request does not contain result", async () => {
+        return request(cacheTestServer.opalCache.app)
+            .post('/result')
+            .send({job_id: 32256263})
+            .expect(400)
+    });
+    test("Cache response is 400 when request does not contain job_id", async () => {
+        return request(cacheTestServer.opalCache.app)
+            .post('/result')
+            .send({result: 100})
+            .expect(400)
+    });
+    test("Cache response is 200 when request contains result and query_id", async () => {
+
+        return request(cacheTestServer.opalCache.app)
+            .post('/result')
+            .send({result: 100, job_id: 32256263})
+            .expect(200)
+    });
+});
