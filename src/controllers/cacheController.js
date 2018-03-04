@@ -20,10 +20,9 @@ CacheController.prototype.postQuery = function(req, res) {
 
     let query = req.body.job;
 
-    //TODO: Use dates to filter. Figure out why they are in a weird format and don't match the ones in mongo
     let filter = {
-        // startDate: query.startDate,
-        // endDate: query.endDate,
+        startDate: new Date(query.startDate),
+        endDate: new Date(query.endDate),
         algorithm: query.algorithm,
         aggregationLevel: query.aggregationLevel,
         aggregationValue: query.aggregationValue
