@@ -27,7 +27,8 @@ CacheController.prototype.postQuery = function(req, res) {
             // Query has never been submitted to the system
             res.send({result: null, waiting: false});
         } else {
-            let statuses = [Constants.EAE_JOB_STATUS_CREATED,
+            let statuses = [
+                Constants.EAE_JOB_STATUS_CREATED,
                 Constants.EAE_JOB_STATUS_QUEUED,
                 Constants.EAE_JOB_STATUS_SCHEDULED,
                 Constants.EAE_JOB_STATUS_RUNNING
