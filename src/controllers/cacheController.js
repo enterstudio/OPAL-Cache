@@ -1,14 +1,8 @@
-const { Constants, ErrorHelper } =  require('eae-utils');
-const request = require('request');
-
-//TODO: Get real Url
-let interfaceUrl = 'localhost:8080';
-
+const { Constants } =  require('eae-utils');
 
 function CacheController(db) {
     this.db = db;
 
-    this.postQuery = CacheController.prototype.postQuery.bind(this);
     this.postResult = CacheController.prototype.postResult.bind(this);
 }
 
@@ -49,31 +43,6 @@ CacheController.prototype.postQuery = function(req, res) {
     }, function (error) {
         console.log(error); // eslint-disable-line no-console
     });
-};
-
-CacheController.prototype.postResult = function(req, res) {
-    if (!req.body.result || !req.body.job_id) {
-        // Request is invalid
-        res.send(400);
-    }
-
-    //Forward result to interface
-    request(
-        {
-            method: 'POST',
-            baseUrl: interfaceUrl,
-            uri: '/result',
-            json: true,
-            body: req.body
-        },
-        function(error) {
-            if (error) {
-                res.json(ErrorHelper('Couldn\'t forward result to interface', error));
-            }
-        }
-    );
-
-    res.send(200);
 };
 
 module.exports = CacheController;
