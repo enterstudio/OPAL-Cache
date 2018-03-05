@@ -2,7 +2,7 @@ const { Constants } =  require('eae-utils');
 
 /**
  * @fn CacheController
- * @desc Controller to cache service
+ * @desc Controller of the cache service
  * @param db
  * @constructor
  */
