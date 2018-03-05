@@ -3,7 +3,7 @@ const { Constants } =  require('eae-utils');
 function CacheController(db) {
     this.db = db;
 
-    this.postResult = CacheController.prototype.postResult.bind(this);
+    this.postQuery = CacheController.prototype.postQuery.bind(this);
 }
 
 CacheController.prototype.postQuery = function(req, res) {
