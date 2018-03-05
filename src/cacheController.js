@@ -1,11 +1,28 @@
 const { Constants } =  require('eae-utils');
 
+/**
+ * @fn CacheController
+ * @desc Controller to cache service
+ * @param db
+ * @constructor
+ */
 function CacheController(db) {
     this.db = db;
 
     this.postQuery = CacheController.prototype.postQuery.bind(this);
 }
 
+/**
+ * @fn postQuery
+ * @desc Submit a new query.
+ * If the query has been submitted before and the result is already in the database, then
+ * it sends back the result.
+ * If the query has been submitted before but the result is not yet in the database, then
+ * it sends back a message saying the interface to wait and try later.
+ * If the query has not been submitted before, then it sends back a message saying that.
+ * @param req Incoming message
+ * @param res Server Response
+ */
 CacheController.prototype.postQuery = function(req, res) {
     if (!req.body.job) {
         // Request is invalid
