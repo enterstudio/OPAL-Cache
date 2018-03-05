@@ -4,6 +4,12 @@ const bodyParser = require('body-parser');
 
 const CacheRouter = require('./cacheRouter');
 
+/**
+ * @fn OpalCache
+ * @desc OpalCache class
+ * @param config
+ * @constructor
+ */
 function OpalCache(config) {
     this.app = express();
     this.config = config;
@@ -12,6 +18,10 @@ function OpalCache(config) {
     this.connectMongoDB = OpalCache.prototype.connectMongoDB.bind(this);
 }
 
+/**
+ * @fn start
+ * @desc Start the OpalCache
+ */
 OpalCache.prototype.start = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
@@ -28,6 +38,10 @@ OpalCache.prototype.start = function() {
     });
 };
 
+/**
+ * @fn connectMongoDB
+ * @desc Connect to the mongodb database
+ */
 OpalCache.prototype.connectMongoDB = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
