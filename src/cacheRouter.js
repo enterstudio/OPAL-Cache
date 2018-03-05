@@ -1,5 +1,5 @@
 const express = require('express');
-const CacheController = require('./controllers/cacheController');
+const CacheController = require('./cacheController');
 
 function CacheRouter(db) {
     this.cacheController = new CacheController(db);

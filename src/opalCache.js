@@ -41,5 +41,4 @@ OpalCache.prototype.connectMongoDB = function() {
     });
 };
 
-
 module.exports = OpalCache;
