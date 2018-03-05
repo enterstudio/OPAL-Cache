@@ -1,17 +1,28 @@
-const { Constants, ErrorHelper } =  require('eae-utils');
-const request = require('request');
+const { Constants } =  require('eae-utils');
 
-//TODO: Get real Url
-let interfaceUrl = 'localhost:8080';
-
-
+/**
+ * @fn CacheController
+ * @desc Controller of the cache service
+ * @param db
+ * @constructor
+ */
 function CacheController(db) {
     this.db = db;
 
     this.postQuery = CacheController.prototype.postQuery.bind(this);
-    this.postResult = CacheController.prototype.postResult.bind(this);
 }
 
+/**
+ * @fn postQuery
+ * @desc Submit a new query.
+ * If the query has been submitted before and the result is already in the database, then
+ * it sends back the result.
+ * If the query has been submitted before but the result is not yet in the database, then
+ * it sends back a message saying the interface to wait and try later.
+ * If the query has not been submitted before, then it sends back a message saying that.
+ * @param req Incoming message
+ * @param res Server Response
+ */
 CacheController.prototype.postQuery = function(req, res) {
     if (!req.body.job) {
         // Request is invalid
@@ -33,7 +44,8 @@ CacheController.prototype.postQuery = function(req, res) {
             // Query has never been submitted to the system
             res.send({result: null, waiting: false});
         } else {
-            let statuses = [Constants.EAE_JOB_STATUS_CREATED,
+            let statuses = [
+                Constants.EAE_JOB_STATUS_CREATED,
                 Constants.EAE_JOB_STATUS_QUEUED,
                 Constants.EAE_JOB_STATUS_SCHEDULED,
                 Constants.EAE_JOB_STATUS_RUNNING
@@ -49,31 +61,6 @@ CacheController.prototype.postQuery = function(req, res) {
     }, function (error) {
         console.log(error); // eslint-disable-line no-console
     });
-};
-
-CacheController.prototype.postResult = function(req, res) {
-    if (!req.body.result || !req.body.job_id) {
-        // Request is invalid
-        res.send(400);
-    }
-
-    //Forward result to interface
-    request(
-        {
-            method: 'POST',
-            baseUrl: interfaceUrl,
-            uri: '/result',
-            json: true,
-            body: req.body
-        },
-        function(error) {
-            if (error) {
-                res.json(ErrorHelper('Couldn\'t forward result to interface', error));
-            }
-        }
-    );
-
-    res.send(200);
 };
 
 module.exports = CacheController;

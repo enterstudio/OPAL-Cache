@@ -4,28 +4,44 @@ const bodyParser = require('body-parser');
 
 const CacheRouter = require('./cacheRouter');
 
+/**
+ * @fn OpalCache
+ * @desc OpalCache class
+ * @param config
+ * @constructor
+ */
 function OpalCache(config) {
-    let _this = this;
     this.app = express();
     this.config = config;
 
-    //TODO: Move function out
-    this.start = function() {
-        return new Promise(function(resolve, reject) {
-            _this.connectMongoDB().then(function(db) {
-                _this.db = db;
-                let cacheRouter = new CacheRouter(db);
-                _this.app.use(bodyParser.json());
-                _this.app.use(cacheRouter.router);
-                resolve(_this.app);
-            }, function(error) {
-                console.log(error); // eslint-disable-line no-console
-                reject(error);
-            });
-        });
-    };
+    this.start = OpalCache.prototype.start.bind(this);
+    this.connectMongoDB = OpalCache.prototype.connectMongoDB.bind(this);
 }
 
+/**
+ * @fn start
+ * @desc Start the OpalCache
+ */
+OpalCache.prototype.start = function() {
+    let _this = this;
+    return new Promise(function(resolve, reject) {
+        _this.connectMongoDB().then(function(db) {
+            _this.db = db;
+            let cacheRouter = new CacheRouter(db);
+            _this.app.use(bodyParser.json());
+            _this.app.use(cacheRouter.router);
+            resolve(_this.app);
+        }, function(error) {
+            console.log(error); // eslint-disable-line no-console
+            reject(error);
+        });
+    });
+};
+
+/**
+ * @fn connectMongoDB
+ * @desc Connect to the mongodb database
+ */
 OpalCache.prototype.connectMongoDB = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
@@ -38,6 +54,5 @@ OpalCache.prototype.connectMongoDB = function() {
         });
     });
 };
-
 
 module.exports = OpalCache;
