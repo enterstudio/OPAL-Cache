@@ -31,6 +31,9 @@ CacheController.prototype.postQuery = function(req, res) {
 
     let query = req.body.job;
 
+    console.log('Query received is: '); // eslint-disable-line no-console
+    console.log(query); // eslint-disable-line no-console
+
     let filter = {
         startDate: new Date(query.startDate),
         endDate: new Date(query.endDate),
