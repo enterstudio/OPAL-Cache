@@ -31,7 +31,6 @@ CacheTestServer.prototype.insertJob = function(job) {
   let _this = this;
   return new Promise(function(resolve) {
       _this.db.collection(Constants.EAE_COLLECTION_JOBS).insertOne(job).then(function(document) {
-          console.log("Inserted Job");
           resolve(document);
       });
   })
