@@ -1,11 +1,9 @@
 const { Constants } =  require('eae-utils');
 
+const config = require('../config/opal.cache.test.config');
 const OpalCache = require('../src/opalCache');
-let mongoUrl = 'mongodb://mongodb:27017';
-// let mongoUrl = 'mongodb://localhost:27017';
 
 function CacheTestServer() {
-    let config = {mongoUrl: mongoUrl};
     this.opalCache = new OpalCache(config);
 }
 
