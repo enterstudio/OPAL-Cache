@@ -15,12 +15,16 @@ afterAll(function ()  {
 
 describe('POST /query', () => {
     test("Cache response is 400 when request does not contain query", async () => {
+        expect.assertions(0);
+
         return request(cacheTestServer.opalCache.app)
             .post('/query')
             .send({})
             .expect(400)
     });
     test("Cache response contains a not null result and waiting set to false when query has been submitted before and is completed", async () => {
+        expect.assertions(2);
+
         let query = {
             startDate: new Date(),
             endDate: new Date(0),
@@ -45,6 +49,8 @@ describe('POST /query', () => {
     });
 
     test("Cache response contains null result and waiting set to false when query has not been submitted before", async () => {
+        expect.assertions(2);
+
         let submittedQuery = {
             startDate: new Date(1),
             endDate: new Date(2),
@@ -77,6 +83,8 @@ describe('POST /query', () => {
     });
 
     test("Cache response contains null result and waiting set to true when query has been submitted already but the result is not ready yet", async () => {
+        expect.assertions(2);
+
         let query = {
             startDate: new Date(),
             endDate: new Date(0),
