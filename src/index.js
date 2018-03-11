@@ -3,8 +3,7 @@ let os = require('os');
 let config = require('../config/opal.cache.config.js');
 let OpalCache = require('./opalCache.js');
 
-let options = Object.assign({}, config);
-let opalCache = new OpalCache(options);
+let opalCache = new OpalCache(config);
 
 opalCache.start().then(function(app) {
     //Remove unwanted express headers
