@@ -10,6 +10,7 @@ function CacheController(db) {
     this.db = db;
 
     this.postQuery = CacheController.prototype.postQuery.bind(this);
+    this._waitingForQueryResult = CacheController.prototype._waitingForQueryResult.bind(this);
 }
 
 /**
@@ -24,6 +25,8 @@ function CacheController(db) {
  * @param res Server Response
  */
 CacheController.prototype.postQuery = function(req, res) {
+    let _this = this;
+
     if (!req.body.job) {
         // Request is invalid
         res.send(400);
@@ -39,18 +42,12 @@ CacheController.prototype.postQuery = function(req, res) {
         aggregationValue: query.aggregationValue
     };
 
-    this.db.collection(Constants.EAE_COLLECTION_JOBS).findOne(filter).then(function(retrievedQuery) {
+    _this.db.collection(Constants.EAE_COLLECTION_JOBS).findOne(filter).then(function(retrievedQuery) {
         if (!retrievedQuery) {
             // Query has never been submitted to the system
             res.send({result: null, waiting: false});
         } else {
-            let statuses = [
-                Constants.EAE_JOB_STATUS_CREATED,
-                Constants.EAE_JOB_STATUS_QUEUED,
-                Constants.EAE_JOB_STATUS_SCHEDULED,
-                Constants.EAE_JOB_STATUS_RUNNING
-            ];
-            if (statuses.includes(retrievedQuery.status[0])) {
+            if (_this._waitingForQueryResult(retrievedQuery)) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
                 res.send({result: null, waiting: true});
             } else {
@@ -61,6 +58,17 @@ CacheController.prototype.postQuery = function(req, res) {
     }, function (error) {
         console.log(error); // eslint-disable-line no-console
     });
+};
+
+CacheController.prototype._waitingForQueryResult = function(query) {
+    let waiting_statuses = [
+        Constants.EAE_JOB_STATUS_CREATED,
+        Constants.EAE_JOB_STATUS_QUEUED,
+        Constants.EAE_JOB_STATUS_SCHEDULED,
+        Constants.EAE_JOB_STATUS_RUNNING
+    ];
+
+    return waiting_statuses.includes(query.status[0]);
 };
 
 module.exports = CacheController;
