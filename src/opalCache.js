@@ -15,7 +15,7 @@ function OpalCache(config) {
     this.config = config;
 
     this.start = OpalCache.prototype.start.bind(this);
-    this.connectMongoDB = OpalCache.prototype.connectMongoDB.bind(this);
+    this.connectToDatabase = OpalCache.prototype.connectToDatabase.bind(this);
 }
 
 /**
@@ -25,7 +25,7 @@ function OpalCache(config) {
 OpalCache.prototype.start = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        _this.connectMongoDB().then(function(db) {
+        _this.connectToDatabase().then(function(db) {
             _this.db = db;
             let cacheRouter = new CacheRouter(db);
             _this.app.use(bodyParser.json());
@@ -39,10 +39,10 @@ OpalCache.prototype.start = function() {
 };
 
 /**
- * @fn connectMongoDB
+ * @fn connectToDatabase
  * @desc Connect to the mongodb database
  */
-OpalCache.prototype.connectMongoDB = function() {
+OpalCache.prototype.connectToDatabase = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
         mongodb.connect(_this.config.mongoUrl, function(error, db) {
