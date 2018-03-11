@@ -10,8 +10,6 @@ function CacheTestServer() {
 CacheTestServer.prototype.setup = function() {
     let _this = this;
     return new Promise(function(resolve) {
-        // Setup node env to test during test
-        process.env.TEST = 1;
         _this.opalCache.start().then(function() {
             _this.db = _this.opalCache.db;
             _this.db.collection(Constants.EAE_COLLECTION_JOBS).deleteMany({}).then(function() {
