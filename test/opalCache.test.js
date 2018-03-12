@@ -30,12 +30,14 @@ describe('POST /query', () => {
         expect.assertions(2);
 
         let query = {
-            startDate: new Date(),
-            endDate: new Date(0),
-            algorithm: "density",
-            aggregationLevel: "A",
-            aggregationValue: "B",
-            status: [Constants.EAE_JOB_STATUS_COMPLETED, Constants.EAE_JOB_STATUS_RUNNING],
+            params: {
+                startDate: new Date(),
+                endDate: new Date(0),
+                algorithm: "density",
+                aggregationLevel: "A",
+                aggregationValue: "B",
+                status: [Constants.EAE_JOB_STATUS_COMPLETED, Constants.EAE_JOB_STATUS_RUNNING],
+            },
             output: [125],
         };
 
@@ -56,22 +58,26 @@ describe('POST /query', () => {
         //TODO: Start with eae job model
 
         let submittedQuery = {
-            startDate: new Date(1),
-            endDate: new Date(2),
-            algorithm: "migration",
-            aggregationLevel: "C",
-            aggregationValue: "C",
-            status: [],
+            params: {
+                startDate: new Date(1),
+                endDate: new Date(2),
+                algorithm: "migration",
+                aggregationLevel: "C",
+                aggregationValue: "C",
+                status: [],
+            },
             output: [3213],
         };
 
         let query = {
-            startDate: new Date(),
-            endDate: new Date(0),
-            algorithm: "density",
-            aggregationLevel: "A",
-            aggregationValue: "B",
-            status: [],
+            params: {
+                startDate: new Date(),
+                endDate: new Date(0),
+                algorithm: "density",
+                aggregationLevel: "A",
+                aggregationValue: "B",
+                status: [],
+            },
             output: [125],
         };
 
@@ -96,12 +102,14 @@ describe('POST /query', () => {
         expect.assertions(3);
 
         let query = {
-            startDate: new Date(),
-            endDate: new Date(0),
-            algorithm: "density",
-            aggregationLevel: "A",
-            aggregationValue: "B",
-            status: [status],
+            params: {
+                startDate: new Date(),
+                endDate: new Date(0),
+                algorithm: "density",
+                aggregationLevel: "A",
+                aggregationValue: "B",
+                status: [status],
+            },
             output: [125],
         };
 
