@@ -86,7 +86,7 @@ describe('POST /query', () => {
     });
 
     test("Cache response contains null result and waiting set to true when query has been submitted already but job has only been created", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         let query = {
             startDate: new Date(),
@@ -106,11 +106,12 @@ describe('POST /query', () => {
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
                 expect(res.body.waiting).toBe(true);
+                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_CREATED);
             })
     });
 
     test("Cache response contains null result and waiting set to true when query has been submitted already but job has only been queued", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         let query = {
             startDate: new Date(),
@@ -130,11 +131,12 @@ describe('POST /query', () => {
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
                 expect(res.body.waiting).toBe(true);
+                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_QUEUED);
             })
     });
 
     test("Cache response contains null result and waiting set to true when query has been submitted already but job has only been scheduled", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         let query = {
             startDate: new Date(),
@@ -154,11 +156,12 @@ describe('POST /query', () => {
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
                 expect(res.body.waiting).toBe(true);
+                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_SCHEDULED);
             })
     });
 
     test("Cache response contains null result and waiting set to true when query has been submitted already but job is still running", async () => {
-        expect.assertions(2);
+        expect.assertions(3);
 
         let query = {
             startDate: new Date(),
@@ -178,6 +181,7 @@ describe('POST /query', () => {
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
                 expect(res.body.waiting).toBe(true);
+                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_RUNNING);
             })
     });
 });

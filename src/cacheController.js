@@ -51,8 +51,7 @@ CacheController.prototype.postQuery = function(req, res) {
         } else {
             if (_this._waitingForQueryResult(retrievedQuery)) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
-                //TODO: Send status
-                res.send({result: null, waiting: true});
+                res.send({result: null, waiting: true, status: retrievedQuery.status[0]});
             } else {
                 // Query has already been already submitted to the system and the system has the result
                 res.send({result: retrievedQuery.output, waiting: false});
