@@ -63,7 +63,11 @@ CacheController.prototype.postQuery = function(req, res) {
     });
 };
 
-//TODO doc
+/**
+ * @fn _waitingForQueryResult
+ * @desc returns whether we are waiting for the result of the query
+ * @param query
+ */
 CacheController.prototype._waitingForQueryResult = function(query) {
     let waiting_statuses = [
         Constants.EAE_JOB_STATUS_CREATED,
