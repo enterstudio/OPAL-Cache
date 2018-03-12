@@ -35,7 +35,6 @@ CacheController.prototype.postQuery = function(req, res) {
 
     let query = req.body.job;
 
-    //TODO
     let filter = {
         'params.startDate': new Date(query.params.startDate),
         'params.endDate': new Date(query.params.endDate),
