@@ -1,7 +1,8 @@
 const request = require('supertest');
 const each = require('jest-each');
+const ObjectID = require('mongodb').ObjectID;
 
-const { Constants } =  require('eae-utils');
+const { Constants, DataModels } =  require('eae-utils');
 const CacheTestServer = require('./cacheTestServer');
 
 let cacheTestServer = new CacheTestServer();
@@ -41,10 +42,12 @@ describe('POST /query', () => {
             output: [125],
         };
 
-        await cacheTestServer.insertJob(query);
+        let fullQuery = getFullQuery(query);
+
+        await cacheTestServer.insertJob(fullQuery);
         return request(cacheTestServer.opalCache.app)
             .post('/query')
-            .send({job: query})
+            .send({job: fullQuery})
             .expect(200)
             .expect(function (res) {
                 expect(res.body.result).toEqual(query.output);
@@ -54,8 +57,6 @@ describe('POST /query', () => {
 
     test("Cache response contains null result and waiting set to false when query has not been submitted before", async () => {
         expect.assertions(2);
-
-        //TODO: Start with eae job model
 
         let submittedQuery = {
             params: {
@@ -69,6 +70,8 @@ describe('POST /query', () => {
             output: [3213],
         };
 
+        let fullSubmittedQuery = getFullQuery(submittedQuery);
+
         let query = {
             params: {
                 startDate: new Date(),
@@ -81,10 +84,12 @@ describe('POST /query', () => {
             output: [125],
         };
 
-        await cacheTestServer.insertJob(submittedQuery);
+        let fullQuery = getFullQuery(query);
+
+        await cacheTestServer.insertJob(fullSubmittedQuery);
         return request(cacheTestServer.opalCache.app)
             .post('/query')
-            .send({job: query})
+            .send({job: fullQuery})
             .expect(200)
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
@@ -113,10 +118,12 @@ describe('POST /query', () => {
             output: [125],
         };
 
-        await cacheTestServer.insertJob(query);
+        let fullQuery = getFullQuery(query);
+
+        await cacheTestServer.insertJob(fullQuery);
         return request(cacheTestServer.opalCache.app)
             .post('/query')
-            .send({job: query})
+            .send({job: fullQuery})
             .expect(200)
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
@@ -125,3 +132,8 @@ describe('POST /query', () => {
             })
     });
 });
+
+function getFullQuery(query) {
+    let eaeJobModel = JSON.parse(JSON.stringify(DataModels.EAE_JOB_MODEL));
+    return Object.assign({}, eaeJobModel, query, {_id: new ObjectID(), type: Constants.EAE_JOB_TYPE_PYTHON2});
+}
