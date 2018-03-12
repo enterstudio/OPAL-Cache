@@ -15,12 +15,15 @@ afterAll(function ()  {
 
 describe('POST /query', () => {
     test("Cache response is 400 when request does not contain query", async () => {
-        expect.assertions(0);
+        expect.assertions(1);
 
         return request(cacheTestServer.opalCache.app)
             .post('/query')
             .send({})
             .expect(400)
+            .expect(function (res) {
+                expect(res.body.error).toEqual('Request does not contain a job in its body');
+            })
     });
     test("Cache response contains a not null result and waiting set to false when query has been submitted before and is completed", async () => {
         expect.assertions(2);

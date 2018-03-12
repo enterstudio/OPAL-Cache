@@ -29,8 +29,8 @@ CacheController.prototype.postQuery = function(req, res) {
 
     if (!req.body.job) {
         // Request is invalid
-        //TODO: Send message explaining whats wrong
-        res.send(400);
+        res.status(400);
+        res.send({error: 'Request does not contain a job in its body'});
     }
 
     let query = req.body.job;
