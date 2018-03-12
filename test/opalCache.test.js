@@ -1,4 +1,5 @@
 const request = require('supertest');
+const each = require('jest-each');
 
 const { Constants } =  require('eae-utils');
 const CacheTestServer = require('./cacheTestServer');
@@ -85,7 +86,13 @@ describe('POST /query', () => {
             })
     });
 
-    test("Cache response contains null result and waiting set to true when query has been submitted already but job has only been created", async () => {
+    each([
+        [Constants.EAE_JOB_STATUS_CREATED],
+        [Constants.EAE_JOB_STATUS_QUEUED],
+        [Constants.EAE_JOB_STATUS_SCHEDULED],
+        [Constants.EAE_JOB_STATUS_TRANSFERRING_DATA],
+        [Constants.EAE_JOB_STATUS_RUNNING],
+    ]).test("Cache response contains null result and waiting set to true when query has been submitted already but job is in status %s", async (status) => {
         expect.assertions(3);
 
         let query = {
@@ -94,7 +101,7 @@ describe('POST /query', () => {
             algorithm: "density",
             aggregationLevel: "A",
             aggregationValue: "B",
-            status: [Constants.EAE_JOB_STATUS_CREATED],
+            status: [status],
             output: [125],
         };
 
@@ -106,82 +113,7 @@ describe('POST /query', () => {
             .expect(function (res) {
                 expect(res.body.result).toBeNull();
                 expect(res.body.waiting).toBe(true);
-                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_CREATED);
-            })
-    });
-
-    test("Cache response contains null result and waiting set to true when query has been submitted already but job has only been queued", async () => {
-        expect.assertions(3);
-
-        let query = {
-            startDate: new Date(),
-            endDate: new Date(0),
-            algorithm: "density",
-            aggregationLevel: "A",
-            aggregationValue: "B",
-            status: [Constants.EAE_JOB_STATUS_QUEUED],
-            output: [125],
-        };
-
-        await cacheTestServer.insertJob(query);
-        return request(cacheTestServer.opalCache.app)
-            .post('/query')
-            .send({job: query})
-            .expect(200)
-            .expect(function (res) {
-                expect(res.body.result).toBeNull();
-                expect(res.body.waiting).toBe(true);
-                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_QUEUED);
-            })
-    });
-
-    test("Cache response contains null result and waiting set to true when query has been submitted already but job has only been scheduled", async () => {
-        expect.assertions(3);
-
-        let query = {
-            startDate: new Date(),
-            endDate: new Date(0),
-            algorithm: "density",
-            aggregationLevel: "A",
-            aggregationValue: "B",
-            status: [Constants.EAE_JOB_STATUS_SCHEDULED],
-            output: [125],
-        };
-
-        await cacheTestServer.insertJob(query);
-        return request(cacheTestServer.opalCache.app)
-            .post('/query')
-            .send({job: query})
-            .expect(200)
-            .expect(function (res) {
-                expect(res.body.result).toBeNull();
-                expect(res.body.waiting).toBe(true);
-                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_SCHEDULED);
-            })
-    });
-
-    test("Cache response contains null result and waiting set to true when query has been submitted already but job is still running", async () => {
-        expect.assertions(3);
-
-        let query = {
-            startDate: new Date(),
-            endDate: new Date(0),
-            algorithm: "density",
-            aggregationLevel: "A",
-            aggregationValue: "B",
-            status: [Constants.EAE_JOB_STATUS_RUNNING],
-            output: [125],
-        };
-
-        await cacheTestServer.insertJob(query);
-        return request(cacheTestServer.opalCache.app)
-            .post('/query')
-            .send({job: query})
-            .expect(200)
-            .expect(function (res) {
-                expect(res.body.result).toBeNull();
-                expect(res.body.waiting).toBe(true);
-                expect(res.body.status).toBe(Constants.EAE_JOB_STATUS_RUNNING);
+                expect(res.body.status).toBe(status);
             })
     });
 });
