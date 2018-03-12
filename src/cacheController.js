@@ -1,4 +1,4 @@
-const { Constants } =  require('eae-utils');
+const { Constants, ErrorHelper } =  require('eae-utils');
 
 /**
  * @fn CacheController
@@ -29,17 +29,18 @@ CacheController.prototype.postQuery = function(req, res) {
 
     if (!req.body.job) {
         // Request is invalid
-        res.send(400);
+        res.status(400);
+        res.send({error: 'Request does not contain a job in its body'});
     }
 
     let query = req.body.job;
 
     let filter = {
-        startDate: new Date(query.startDate),
-        endDate: new Date(query.endDate),
-        algorithm: query.algorithm,
-        aggregationLevel: query.aggregationLevel,
-        aggregationValue: query.aggregationValue
+        'params.startDate': new Date(query.params.startDate),
+        'params.endDate': new Date(query.params.endDate),
+        'params.algorithm': query.params.algorithm,
+        'params.aggregationLevel': query.params.aggregationLevel,
+        'params.aggregationValue': query.params.aggregationValue
     };
 
     _this.db.collection(Constants.EAE_COLLECTION_JOBS).findOne(filter).then(function(retrievedQuery) {
@@ -49,26 +50,33 @@ CacheController.prototype.postQuery = function(req, res) {
         } else {
             if (_this._waitingForQueryResult(retrievedQuery)) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
-                res.send({result: null, waiting: true});
+                res.send({result: null, waiting: true, status: retrievedQuery.params.status[0]});
             } else {
                 // Query has already been already submitted to the system and the system has the result
                 res.send({result: retrievedQuery.output, waiting: false});
             }
         }
     }, function (error) {
-        console.log(error); // eslint-disable-line no-console
+        res.status(500);
+        res.json(ErrorHelper('Internal Mongo Error', error));
     });
 };
 
+/**
+ * @fn _waitingForQueryResult
+ * @desc returns whether we are waiting for the result of the query
+ * @param query
+ */
 CacheController.prototype._waitingForQueryResult = function(query) {
     let waiting_statuses = [
         Constants.EAE_JOB_STATUS_CREATED,
         Constants.EAE_JOB_STATUS_QUEUED,
         Constants.EAE_JOB_STATUS_SCHEDULED,
+        Constants.EAE_JOB_STATUS_TRANSFERRING_DATA,
         Constants.EAE_JOB_STATUS_RUNNING
     ];
 
-    return waiting_statuses.includes(query.status[0]);
+    return waiting_statuses.includes(query.params.status[0]);
 };
 
 module.exports = CacheController;
