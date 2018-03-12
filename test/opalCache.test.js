@@ -41,8 +41,6 @@ describe('POST /query', () => {
             .send({job: query})
             .expect(200)
             .expect(function (res) {
-                console.log("Body is: ");
-                console.log(res.body);
                 expect(res.body.result).toEqual(query.output);
                 expect(res.body.waiting).toBe(false);
             })
@@ -50,6 +48,8 @@ describe('POST /query', () => {
 
     test("Cache response contains null result and waiting set to false when query has not been submitted before", async () => {
         expect.assertions(2);
+
+        //TODO: Start with eae job model
 
         let submittedQuery = {
             startDate: new Date(1),

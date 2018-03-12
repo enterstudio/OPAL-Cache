@@ -32,7 +32,6 @@ OpalCache.prototype.start = function() {
             _this.app.use(cacheRouter.router);
             resolve(_this.app);
         }, function(error) {
-            console.log(error); // eslint-disable-line no-console
             reject(error);
         });
     });

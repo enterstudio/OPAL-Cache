@@ -1,4 +1,4 @@
-const { Constants } =  require('eae-utils');
+const { Constants, ErrorHelper } =  require('eae-utils');
 
 /**
  * @fn CacheController
@@ -29,11 +29,13 @@ CacheController.prototype.postQuery = function(req, res) {
 
     if (!req.body.job) {
         // Request is invalid
+        //TODO: Send message explaining whats wrong
         res.send(400);
     }
 
     let query = req.body.job;
 
+    //TODO
     let filter = {
         startDate: new Date(query.startDate),
         endDate: new Date(query.endDate),
@@ -49,6 +51,7 @@ CacheController.prototype.postQuery = function(req, res) {
         } else {
             if (_this._waitingForQueryResult(retrievedQuery)) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
+                //TODO: Send status
                 res.send({result: null, waiting: true});
             } else {
                 // Query has already been already submitted to the system and the system has the result
@@ -56,15 +59,18 @@ CacheController.prototype.postQuery = function(req, res) {
             }
         }
     }, function (error) {
-        console.log(error); // eslint-disable-line no-console
+        res.status(500);
+        res.json(ErrorHelper('Internal Mongo Error', error));
     });
 };
 
+//TODO doc
 CacheController.prototype._waitingForQueryResult = function(query) {
     let waiting_statuses = [
         Constants.EAE_JOB_STATUS_CREATED,
         Constants.EAE_JOB_STATUS_QUEUED,
         Constants.EAE_JOB_STATUS_SCHEDULED,
+        Constants.EAE_JOB_STATUS_TRANSFERRING_DATA,
         Constants.EAE_JOB_STATUS_RUNNING
     ];
 
