@@ -50,7 +50,7 @@ CacheController.prototype.postQuery = function(req, res) {
         } else {
             if (_this._waitingForQueryResult(retrievedQuery)) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
-                res.send({result: null, waiting: true, status: retrievedQuery.params.status[0]});
+                res.send({result: null, waiting: true, status: retrievedQuery.status[0]});
             } else {
                 // Query has already been already submitted to the system and the system has the result
                 res.send({result: retrievedQuery.output, waiting: false});
@@ -76,7 +76,7 @@ CacheController.prototype._waitingForQueryResult = function(query) {
         Constants.EAE_JOB_STATUS_RUNNING
     ];
 
-    return waiting_statuses.includes(query.params.status[0]);
+    return waiting_statuses.includes(query.status[0]);
 };
 
 module.exports = CacheController;
