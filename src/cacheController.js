@@ -36,11 +36,11 @@ CacheController.prototype.postQuery = function(req, res) {
     let query = req.body.job;
 
     let filter = {
-        'params.startDate': new Date(query.params.startDate),
-        'params.endDate': new Date(query.params.endDate),
+        'params.startDate': query.params.startDate,
+        'params.endDate': query.params.endDate,
         'params.algorithm': query.params.algorithm,
         'params.aggregationLevel': query.params.aggregationLevel,
-        'params.aggregationValue': query.params.aggregationValue
+        'params.aggregationValues': query.params.aggregationValues
     };
 
     _this.db.collection(Constants.EAE_COLLECTION_JOBS).findOne(filter).then(function(retrievedQuery) {

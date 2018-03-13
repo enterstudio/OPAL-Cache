@@ -32,11 +32,11 @@ describe('POST /query', () => {
 
         let query = {
             params: {
-                startDate: new Date(),
-                endDate: new Date(0),
+                startDate: '2013-01-01T00:00:00Z',
+                endDate: '2015-12-31T23:59:59Z',
                 algorithm: "density",
                 aggregationLevel: "A",
-                aggregationValue: "B",
+                aggregationValues: ["B"],
                 status: [Constants.EAE_JOB_STATUS_COMPLETED, Constants.EAE_JOB_STATUS_RUNNING],
             },
             output: [125],
@@ -60,11 +60,11 @@ describe('POST /query', () => {
 
         let submittedQuery = {
             params: {
-                startDate: new Date(1),
-                endDate: new Date(2),
+                startDate: '2013-01-01T00:00:00Z',
+                endDate: '2015-12-31T23:59:59Z',
                 algorithm: "migration",
                 aggregationLevel: "C",
-                aggregationValue: "C",
+                aggregationValues: ["C"],
                 status: [],
             },
             output: [3213],
@@ -74,11 +74,11 @@ describe('POST /query', () => {
 
         let query = {
             params: {
-                startDate: new Date(),
-                endDate: new Date(0),
+                startDate: '2013-01-01T00:00:00Z',
+                endDate: '2015-12-31T23:59:59Z',
                 algorithm: "density",
                 aggregationLevel: "A",
-                aggregationValue: "B",
+                aggregationValues: ["B"],
                 status: [],
             },
             output: [125],
@@ -108,11 +108,11 @@ describe('POST /query', () => {
 
         let query = {
             params: {
-                startDate: new Date(),
-                endDate: new Date(0),
+                startDate: '2013-01-01T00:00:00Z',
+                endDate: '2015-12-31T23:59:59Z',
                 algorithm: "density",
                 aggregationLevel: "A",
-                aggregationValue: "B",
+                aggregationValues: ["C"],
                 status: [status],
             },
             output: [125],
