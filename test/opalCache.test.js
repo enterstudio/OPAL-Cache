@@ -37,8 +37,8 @@ describe('POST /query', () => {
                 algorithm: "density",
                 aggregationLevel: "A",
                 aggregationValues: ["B"],
-                status: [Constants.EAE_JOB_STATUS_COMPLETED, Constants.EAE_JOB_STATUS_RUNNING],
             },
+            status: [Constants.EAE_JOB_STATUS_COMPLETED, Constants.EAE_JOB_STATUS_RUNNING],
             output: [125],
         };
 
@@ -65,8 +65,8 @@ describe('POST /query', () => {
                 algorithm: "migration",
                 aggregationLevel: "C",
                 aggregationValues: ["C"],
-                status: [],
             },
+            status: [],
             output: [3213],
         };
 
@@ -79,8 +79,8 @@ describe('POST /query', () => {
                 algorithm: "density",
                 aggregationLevel: "A",
                 aggregationValues: ["B"],
-                status: [],
             },
+            status: [],
             output: [125],
         };
 
@@ -113,8 +113,8 @@ describe('POST /query', () => {
                 algorithm: "density",
                 aggregationLevel: "A",
                 aggregationValues: ["C"],
-                status: [status],
             },
+            status: [status],
             output: [125],
         };
 
