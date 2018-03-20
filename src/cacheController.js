@@ -46,13 +46,16 @@ CacheController.prototype.postQuery = function(req, res) {
     _this.db.collection(Constants.EAE_COLLECTION_JOBS).findOne(filter).then(function(retrievedQuery) {
         if (!retrievedQuery) {
             // Query has never been submitted to the system
+            res.send(200);
             res.send({result: null, waiting: false});
         } else {
             if (_this._waitingForQueryResult(retrievedQuery)) {
                 // Query has already been submitted to the system, but the system is still waiting for the result
+                res.send(200);
                 res.send({result: null, waiting: true, status: retrievedQuery.status[0]});
             } else {
                 // Query has already been already submitted to the system and the system has the result
+                res.send(200);
                 res.send({result: retrievedQuery.output, waiting: false});
             }
         }
