@@ -2,7 +2,7 @@
 FROM node:wheezy
 
 # Install all dependencies
-RUN apt-get update
+RUN apt-get update -q && apt-get upgrade -y --no-install-recommends
 
 # Create app directories
 RUN mkdir -p /usr/app
