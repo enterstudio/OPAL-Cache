@@ -1,8 +1,8 @@
 # OPAL-Cache
 [![Dim Sums](https://img.shields.io/badge/made-with_Dim_Sums-4da3ff.svg?style=flat-square)](https://www.opalproject.org)
-[![Travis](https://img.shields.io/travis/dsi-icl/OPAL-Cache/master.svg?style=flat-square)](https://travis-ci.org/dsi-icl/OPAL-Cache) 
-[![David](https://img.shields.io/david/dsi-icl/OPAL-Cache.svg?style=flat-square)](https://david-dm.org/dsi-icl/OPAL-Cache) 
-[![David](https://img.shields.io/david/dev/dsi-icl/OPAL-Cache.svg?style=flat-square)](https://david-dm.org/dsi-icl/OPAL-Cache?type=dev)
+[![Travis](https://img.shields.io/travis/OPAL-Project/OPAL-Cache/master.svg?style=flat-square)](https://travis-ci.org/OPAL-Project/OPAL-Cache) 
+[![David](https://img.shields.io/david/OPAL-Project/OPAL-Cache.svg?style=flat-square)](https://david-dm.org/OPAL-Project/OPAL-Cache) 
+[![David](https://img.shields.io/david/dev/OPAL-Project/OPAL-Cache.svg?style=flat-square)](https://david-dm.org/OPAL-Project/OPAL-Cache?type=dev)
 
 OPAL - Cache micro-service
 
