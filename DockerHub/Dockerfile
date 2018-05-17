@@ -4,19 +4,25 @@ FROM node:wheezy
 # Install all dependencies
 RUN apt-get update -q && apt-get upgrade -y --no-install-recommends
 
+
 # Create app directories
 RUN mkdir -p /usr/app
-WORKDIR /usr/app
+WORKDIR /root
 
-# Install app dependencies
-COPY ./package.json /usr/app/
-# Install opal-cache npm dependencies
-RUN npm install --silent; exit 0;
-RUN cat /root/.npm/_logs/*; exit 0;
+# We download the opal interface
+RUN git clone -b master https://github.com/opal-project/opal-cache
+
+WORKDIR /root/opal-cache
 
 # Bundle app
-COPY ./src /usr/app/src
-COPY ./config/opal.cache.config.js /usr/app/config/opal.cache.config.js
+RUN cp package.json /usr/app/ \
+   && cp -r src /usr/app/src
+
+WORKDIR /usr/app
+
+# Install opal-interface npm dependencies
+RUN npm install --silent; exit 0;
+RUN cat /root/.npm/_logs/*; exit 0;
 
 # Run compute service
 EXPOSE 80
