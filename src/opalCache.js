@@ -56,7 +56,8 @@ OpalCache.prototype.connectToDatabase = function() {
             if (error) {
                 reject('Could not connect to database');
             } else {
-                resolve(db);
+                _this.db = db;
+                resolve(true);
             }
         });
     });
