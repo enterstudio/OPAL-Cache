@@ -38,6 +38,10 @@ OpalCache.prototype.start = function() {
 
             // Setup cache controller
             _this._setupCacheControllers();
+
+            // Start status periodic update
+            _this.status_helper.startPeriodicUpdate(5 * 1000); // Update status every 5 seconds
+
             resolve(_this.app);
         }, function(error) {
             reject(error);
