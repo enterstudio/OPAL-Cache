@@ -72,7 +72,7 @@ OpalCache.prototype._setupStatusController = function () {
     let statusOpts = {
         version: package_json.version
     };
-    _this.status_helper = new StatusHelper(Constants_Opal.OPAL_SERVICE_TYPE_CACHE, config.port, null, statusOpts);
+    _this.status_helper = new StatusHelper(Constants_Opal.OPAL_SERVICE_TYPE_CACHE, _this.config.port, null, statusOpts);
     _this.status_helper.setCollection(_this.db.collection(Constants.EAE_COLLECTION_STATUS));
     _this.status_helper.setStatus(Constants.EAE_SERVICE_STATUS_BUSY);
 
