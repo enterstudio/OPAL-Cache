@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const { StatusHelper, Constants } = require('eae-utils');
 const { Constants_Opal } = require('opal-utils');
 
-const CacheRouter = require('./cacheRouter');
+const CacheController = require('./cacheController');
 const StatusController = require('./statusController');
 const package_json = require('../package.json');
 
@@ -31,12 +31,13 @@ function OpalCache(config) {
 OpalCache.prototype.start = function() {
     let _this = this;
     return new Promise(function(resolve, reject) {
-        _this.connectToDatabase().then(function(db) {
-            _this.db = db;
-            _this._setupStatusController();
-            let cacheRouter = new CacheRouter(db);
+        _this.connectToDatabase().then(function() {
             _this.app.use(bodyParser.json());
-            _this.app.use(cacheRouter.router);
+            // Setup route using controllers
+            _this._setupStatusController();
+
+            // Setup cache controller
+            _this._setupCacheControllers();
             resolve(_this.app);
         }, function(error) {
             reject(error);
@@ -74,11 +75,22 @@ OpalCache.prototype._setupStatusController = function () {
     };
     _this.status_helper = new StatusHelper(Constants_Opal.OPAL_SERVICE_TYPE_CACHE, global.opal_cache_config.port, null, statusOpts);
     _this.status_helper.setCollection(_this.db.collection(Constants.EAE_COLLECTION_STATUS));
-    _this.status_helper.setStatus(Constants.EAE_SERVICE_STATUS_BUSY);
 
     _this.statusController = new StatusController(_this.status_helper);
     _this.app.get('/status', _this.statusController.getStatus); // GET status
     _this.app.get('/specs', _this.statusController.getFullStatus); // GET Full status
+};
+
+/**
+ * @fn _setupCacheControllers
+ * @desc Initialize the Cache service routes and controller
+ * @private
+ */
+OpalCache.prototype._setupCacheControllers = function() {
+    let _this = this;
+    // We create the controllers and initialize the routes
+    _this.cacheController = new CacheController(_this.db);
+    _this.app.post('/query', _this.cacheController.postQuery);
 };
 
 module.exports = OpalCache;
