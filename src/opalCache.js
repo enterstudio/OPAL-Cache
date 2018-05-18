@@ -6,7 +6,6 @@ const { Constants_Opal } = require('opal-utils');
 
 const CacheRouter = require('./cacheRouter');
 const StatusController = require('./statusController');
-const config = require('../config/opal.cache.config');
 const package_json = require('../package.json');
 
 /**
@@ -16,8 +15,9 @@ const package_json = require('../package.json');
  * @constructor
  */
 function OpalCache(config) {
-    this.app = express();
     this.config = config;
+    this.app = express();
+    global.opal_cache_config = config;
 
     this.start = OpalCache.prototype.start.bind(this);
     this.connectToDatabase = OpalCache.prototype.connectToDatabase.bind(this);
@@ -72,7 +72,7 @@ OpalCache.prototype._setupStatusController = function () {
     let statusOpts = {
         version: package_json.version
     };
-    _this.status_helper = new StatusHelper(Constants_Opal.OPAL_SERVICE_TYPE_CACHE, _this.config.port, null, statusOpts);
+    _this.status_helper = new StatusHelper(Constants_Opal.OPAL_SERVICE_TYPE_CACHE, global.opal_cache_config.port, null, statusOpts);
     _this.status_helper.setCollection(_this.db.collection(Constants.EAE_COLLECTION_STATUS));
     _this.status_helper.setStatus(Constants.EAE_SERVICE_STATUS_BUSY);
 
